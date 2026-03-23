@@ -1,23 +1,22 @@
 import { Box, Typography, Container } from '@mui/material';
 import { Header } from '../components/Header';
 import { CategorySlider } from '../components/CategorySlider';
-import { ProductGrid } from '../components/ProductGrid'; 
+import { ProductGrid } from '../components/ProductGrid';
+import { CheckoutModal } from '../components/CheckoutModal';
 
 export const HomePage = () => {
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
       
-      {/* Contenedor principal: En móvil ocupa 100%, en PC se centra y no pasa de 'sm' (600px) o 'md' */}
       <Container maxWidth="sm" disableGutters sx={{ backgroundColor: 'background.default', pb: 10, minHeight: '100vh' }}>
         
         <Header />
 
-        {/* --- SECCIÓN HÉROE --- */}
         <Box sx={{ px: 2, mt: 1 }}>
           <Box 
             sx={{ 
               p: 3, 
-              borderRadius: 4, // <-- Cambiamos de 6 a 4 para que sea una tarjeta rectangular con bordes suaves
+              borderRadius: 4,
               height: '200px', 
               display: 'flex',
               flexDirection: 'column',
@@ -40,6 +39,8 @@ export const HomePage = () => {
         <CategorySlider />
         
         <ProductGrid />
+
+        <CheckoutModal />
 
       </Container>
     </Box>
