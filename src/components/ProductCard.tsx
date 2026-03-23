@@ -1,23 +1,30 @@
 import { Box, Typography, Paper } from '@mui/material';
 import BoltIcon from '@mui/icons-material/Bolt';
+import { useAppDispatch } from '../store';
+import { openCheckout } from '../store/slices/checkoutSlice';
+import { type Product } from '../store/slices/productSlice';
 
 interface ProductCardProps {
-  name: string;
-  price: number;
-  imageUrl: string;
-  freeShipping: boolean;
+  product: Product;
 }
 
-export const ProductCard = ({ name, price, imageUrl, freeShipping }: ProductCardProps) => {
+export const ProductCard = ({ product }: ProductCardProps) => {
+  const dispatch = useAppDispatch();
+
   const formattedPrice = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
     minimumFractionDigits: 0,
-  }).format(price);
+  }).format(product.price);
+
+  const handleOpenCheckout = () => {
+    dispatch(openCheckout(product));
+  };
 
   return (
     <Paper
       elevation={0}
+      onClick={handleOpenCheckout} 
       sx={{
         borderRadius: 4,
         overflow: 'hidden',
@@ -30,7 +37,7 @@ export const ProductCard = ({ name, price, imageUrl, freeShipping }: ProductCard
       <Box
         sx={{
           height: 160,
-          backgroundImage: `url(${imageUrl})`,
+          backgroundImage: `url(${product.imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundColor: '#F5F5F5'
@@ -41,30 +48,20 @@ export const ProductCard = ({ name, price, imageUrl, freeShipping }: ProductCard
         <Typography 
           variant="body2" 
           color="text.secondary" 
-          sx={{ 
-            display: '-webkit-box', 
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical', 
-            overflow: 'hidden',
-            lineHeight: 1.2,
-            mb: 1,
-            height: '2.4em' 
-          }}
+          sx={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.2, mb: 1, height: '2.4em' }}
         >
-          {name}
+          {product.name}
         </Typography>
         
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
           {formattedPrice}
         </Typography>
 
-        {freeShipping && (
-          <Box sx={{ display: 'flex', alignItems: 'center', color: 'secondary.main' }}>
-            <Typography variant="caption" sx={{ fontWeight: 600 }}>Envío gratis</Typography>
-            <BoltIcon sx={{ fontSize: 16, ml: 0.5, fontStyle: 'italic' }} />
-            <Typography variant="caption" sx={{ fontWeight: 700, fontStyle: 'italic' }}>FULL</Typography>
-          </Box>
-        )}
+        <Box sx={{ display: 'flex', alignItems: 'center', color: 'secondary.main' }}>
+          <Typography variant="caption" sx={{ fontWeight: 600 }}>Envío gratis</Typography>
+          <BoltIcon sx={{ fontSize: 16, ml: 0.5, fontStyle: 'italic' }} />
+          <Typography variant="caption" sx={{ fontWeight: 700, fontStyle: 'italic' }}>FULL</Typography>
+        </Box>
       </Box>
     </Paper>
   );

@@ -37,10 +37,10 @@ export const ProductGrid = () => {
           {products.map((product) => (
             <ProductCard 
               key={product.id}
-              name={product.name}
-              price={product.price}
-              imageUrl={product.imageUrl || 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=400'}
-              freeShipping={true} 
+              product={{
+                ...product,
+                imageUrl: product.imageUrl || 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=400'
+              }}
             />
           ))}
         </Box>
