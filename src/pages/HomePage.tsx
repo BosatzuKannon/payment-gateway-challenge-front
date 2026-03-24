@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import { CategorySlider } from '../components/CategorySlider';
 import { ProductGrid } from '../components/ProductGrid';
 import { CheckoutModal } from '../components/CheckoutModal';
+import { PaymentSummary } from '../components/PaymentSummary';
 
 export const HomePage = () => {
   return (
@@ -41,6 +42,8 @@ export const HomePage = () => {
         <ProductGrid />
 
         <CheckoutModal />
+
+        <PaymentSummary />
 
       </Container>
     </Box>
