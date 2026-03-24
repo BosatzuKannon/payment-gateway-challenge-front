@@ -1,6 +1,17 @@
 import { Box, TextField } from '@mui/material';
 
-export const ShippingForm = ({ fullName, setFullName, address, setAddress, city, setCity, zipCode, setZipCode }: any) => (
+interface ShippingFormProps {
+  fullName: string;
+  setFullName: React.Dispatch<React.SetStateAction<string>>;
+  address: string;
+  setAddress: React.Dispatch<React.SetStateAction<string>>;
+  city: string;
+  setCity: React.Dispatch<React.SetStateAction<string>>;
+  zipCode: string;
+  setZipCode: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const ShippingForm = ({ fullName, setFullName, address, setAddress, city, setCity, zipCode, setZipCode }: ShippingFormProps) => (
   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
     <TextField fullWidth placeholder="Nombre Completo" variant="filled" size="small" value={fullName} onChange={(e) => setFullName(e.target.value)} InputProps={{ disableUnderline: true, sx: { borderRadius: 2, backgroundColor: '#FFF9C4' } }} />
     <TextField fullWidth placeholder="Dirección" variant="filled" size="small" value={address} onChange={(e) => setAddress(e.target.value)} InputProps={{ disableUnderline: true, sx: { borderRadius: 2, backgroundColor: '#FFF9C4' } }} />

@@ -86,8 +86,12 @@ export const CheckoutModal = () => {
 
       dispatch(processTokenization({ token: data.data.id, delivery: { fullName, address, city, zipCode } }));
 
-    } catch (error: any) {
-      setErrorMessage(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Ocurrió un error inesperado');
+      }
       setOpenToast(true);
     } finally {
       setIsLoading(false);

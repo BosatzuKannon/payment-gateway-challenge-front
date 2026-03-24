@@ -1,7 +1,17 @@
 import { Box, Typography, TextField } from '@mui/material';
 import ContactlessIcon from '@mui/icons-material/Contactless';
 
-export const CreditCardVisual = ({ cardNumber, handleCardNumberChange, expiry, handleExpiryChange, cvc, setCvc, cardBrand }: any) => {
+interface CreditCardVisualProps {
+  cardNumber: string;
+  handleCardNumberChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  expiry: string;
+  handleExpiryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  cvc: string;
+  setCvc: React.Dispatch<React.SetStateAction<string>>;
+  cardBrand: 'visa' | 'mastercard' | '';
+}
+
+export const CreditCardVisual = ({ cardNumber, handleCardNumberChange, expiry, handleExpiryChange, cvc, setCvc, cardBrand }: CreditCardVisualProps) => {
   const renderBrandLogo = () => {
     if (cardBrand === 'visa') return <Typography sx={{ fontStyle: 'italic', fontWeight: 900, fontSize: '1.4rem', color: '#FFF' }}>VISA</Typography>;
     if (cardBrand === 'mastercard') return (
