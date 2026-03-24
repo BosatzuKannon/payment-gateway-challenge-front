@@ -4,6 +4,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useAppSelector, useAppDispatch } from '../store';
 import { closeCheckout } from '../store/slices/checkoutSlice';
 import { useState } from 'react';
+import { API_URL } from '../../src/config/api';
 
 export const PaymentSummary = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ export const PaymentSummary = () => {
   const handleFinalPay = async () => {
     setIsProcessing(true);
     try {
-      const response = await fetch('http://localhost:3000/transactions', {
+      const response = await fetch(`${API_URL}/transactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
