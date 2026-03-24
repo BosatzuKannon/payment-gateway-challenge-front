@@ -14,7 +14,8 @@ interface CheckoutState {
   quantity: number;
   deliveryInfo: DeliveryInfo | null;
   wompiToken: string | null;
-  isSummaryOpen: boolean; 
+  isSummaryOpen: boolean;
+  delivery: DeliveryInfo;
 }
 
 const initialState: CheckoutState = {
@@ -24,6 +25,12 @@ const initialState: CheckoutState = {
   deliveryInfo: null,
   wompiToken: null,
   isSummaryOpen: false,
+  delivery: {
+    fullName: '',
+    address: '',
+    city: '',
+    zipCode: '',
+  },
 };
 
 const checkoutSlice = createSlice({
@@ -48,7 +55,7 @@ const checkoutSlice = createSlice({
     },
     processTokenization: (state, action: PayloadAction<{ token: string, delivery: DeliveryInfo }>) => {
       state.wompiToken = action.payload.token;
-      state.deliveryInfo = action.payload.delivery;
+      state.delivery = action.payload.delivery;
       state.isModalOpen = false;
       state.isSummaryOpen = true;
     }
