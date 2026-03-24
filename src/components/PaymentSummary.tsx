@@ -1,4 +1,4 @@
-import { Dialog, Box, Typography, Button, Divider, CircularProgress, Chip } from '@mui/material';
+import { Dialog, Box, Typography, Button, Divider, CircularProgress, Chip, Snackbar, Alert } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useAppSelector, useAppDispatch } from '../store';
@@ -7,8 +7,11 @@ import { useState } from 'react';
 
 export const PaymentSummary = () => {
   const dispatch = useAppDispatch();
-  const { isSummaryOpen, selectedProduct, quantity, wompiToken } = useAppSelector((state) => state.checkout);
+  const { isSummaryOpen, selectedProduct, quantity, wompiToken, delivery } = useAppSelector((state) => state.checkout);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const [showToast, setShowToast] = useState(false);
+  const [orderId, setOrderId] = useState('');
 
   if (!selectedProduct) return null;
 
@@ -25,18 +28,46 @@ export const PaymentSummary = () => {
   };
 
   const handleFinalPay = async () => {
-    setIsProcessing(true); 
+    setIsProcessing(true);
+    try {
+      const response = await fetch('http://localhost:3000/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: selectedProduct.id,
+          quantity: quantity,
+          paymentToken: wompiToken,
+          customerName: delivery.fullName,
+          customerEmail: 'carlos.prueba@wompi.com',
+          shippingAddress: delivery.address,
+          shippingCity: delivery.city,
+          shippingZipCode: delivery.zipCode
+        }),
+      });
 
-    console.log("🎟️ Token listo para enviar al backend:", wompiToken);
-    console.log("💰 Total a cobrar:", total);
-    
-    setTimeout(() => {
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al procesar el pago en el servidor');
+      }
+
+      setOrderId(data.id);
+      setShowToast(true);
+
+      setTimeout(() => {
+        dispatch(closeCheckout());
+        setShowToast(false);
+      }, 4000);
+
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Error desconocido de comunicación');
+    } finally {
       setIsProcessing(false);
-      alert('¡Aquí conectaremos con NestJS en el próximo paso!');
-    }, 1500);
+    }
   };
 
   return (
+    <>
     <Dialog 
       open={isSummaryOpen} 
       onClose={isProcessing ? undefined : handleCancel} 
@@ -105,5 +136,14 @@ export const PaymentSummary = () => {
       </Button>
 
     </Dialog>
+    <Snackbar 
+      open={showToast} 
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+      <Alert severity="success" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
+        ¡Pago exitoso! Orden: {orderId}
+      </Alert>
+    </Snackbar>
+    </>
   );
 };
